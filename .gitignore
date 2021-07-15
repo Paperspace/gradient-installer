@@ -4,3 +4,4 @@ gradient-kubeconfig
 plugins
 terraform.tfstate
 gradient-installer
+.idea/

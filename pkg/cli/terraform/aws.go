@@ -6,11 +6,15 @@ type AWS struct {
 	*Common
 }
 
-func NewAWS() *AWS {
+func NewAWS(version string) *AWS {
 	aws := AWS{
 		Common: NewCommon(),
 	}
 
-	aws.TerraformSource = fmt.Sprintf("%s?ref=master/gradient-aws", SourcePrefix)
+	refVersion := "master"
+	if version != "latest" && version != "" {
+		refVersion = version
+	}
+	aws.TerraformSource = fmt.Sprintf("%s?ref=%s/gradient-aws", SourcePrefix, refVersion)
 	return &aws
 }

@@ -23,7 +23,7 @@ type Metal struct {
 	SSHUser             string       `json:"ssh_user,omitempty"`
 }
 
-func NewMetal() *Metal {
+func NewMetal(version string) *Metal {
 	metal := Metal{
 		Common:      NewCommon(),
 		MainNode:    NewMetalNode(),
@@ -32,7 +32,11 @@ func NewMetal() *Metal {
 		SSHUser:     "ubuntu",
 	}
 
-	metal.TerraformSource = fmt.Sprintf("%s?ref=master/gradient-metal", SourcePrefix)
+	refVersion := "master"
+	if version != "latest" && version != "" {
+		refVersion = version
+	}
+	metal.TerraformSource = fmt.Sprintf("%s?ref=%s/gradient-metal", SourcePrefix, refVersion)
 	return &metal
 }
 

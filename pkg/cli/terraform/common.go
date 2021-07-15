@@ -16,6 +16,8 @@ type Common struct {
 	ClusterAPIKey                  string            `json:"cluster_apikey"`
 	ClusterHandle                  string            `json:"cluster_handle"`
 	Domain                         string            `json:"domain"`
+	GradientProcessingChart        string            `json:"gradient_processing_chart,omitempty"`
+	GradientProcessingVersion      string            `json:"gradient_processing_version,omitempty"`
 	LetsEncryptDNSName             string            `json:"letsencrypt_dns_name,omitempty"`
 	LetsEncryptDNSSettings         map[string]string `json:"letsencrypt_dns_settings,omitempty"`
 	Name                           string            `json:"name"`

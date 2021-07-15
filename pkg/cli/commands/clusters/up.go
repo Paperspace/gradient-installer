@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"regexp"
 
 	"github.com/Paperspace/gradient-installer/pkg/cli"
 	"github.com/Paperspace/gradient-installer/pkg/cli/config"
@@ -440,7 +441,7 @@ func setupTerraformProvider(terraformProvider *terraform.TerraformProvider) erro
 	return nil
 }
 
-func NewClusterUpCommand() *cobra.Command {
+func NewClusterUpCommand(version string) *cobra.Command {
 	var autoApprove bool
 	var reinstall bool
 
@@ -482,7 +483,7 @@ func NewClusterUpCommand() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			terraformInstance := terraform.NewTerraform(cluster.Platform)
+			terraformInstance := terraform.NewTerraform(cluster.Platform, version)
 
 			// Load existing config values if exists
 			if err := config.LoadConfigIfExists(terraformDir, TerraformTFName, terraformInstance); err != nil {
@@ -532,6 +533,18 @@ func NewClusterUpCommand() *cobra.Command {
 			sourcePrefix := os.Getenv("PAPERSPACE_TERRAFORM_PREFIX")
 			if sourcePrefix != "" {
 				terraformCommon.UpdateSourcePrefix(sourcePrefix, cluster.Platform)
+			} else {
+				if version != "latest" && version != "" {
+					// Update terraform module source ref to current version
+					r, err := regexp.Compile(`\?ref=v\d+\.\d+\.\d+/|\?ref=master/`)
+					if err != nil {
+						return err
+					}
+					sourceWithUpdatedVersion := r.ReplaceAllString(terraformCommon.TerraformSource, "?ref=" + version +"/")
+					if sourceWithUpdatedVersion != terraformCommon.TerraformSource {
+						terraformCommon.TerraformSource = sourceWithUpdatedVersion
+					}
+				}
 			}
 
 			// Write Config

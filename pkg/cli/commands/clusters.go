@@ -5,14 +5,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewClusterCommand() *cobra.Command {
+func NewClusterCommand(version string) *cobra.Command {
 	command := cobra.Command{
 		Use:   "clusters",
 		Short: "Manage private clusters",
 	}
 	command.AddCommand(clusters.NewClusterDownCommand())
 	command.AddCommand(clusters.NewClusterListCommand())
-	command.AddCommand(clusters.NewClusterUpCommand())
+	command.AddCommand(clusters.NewClusterUpCommand(version))
 
 	return &command
 }

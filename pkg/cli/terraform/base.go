@@ -20,20 +20,20 @@ type Terraform struct {
 	TerraformProvider *TerraformProvider `json:"terraform"`
 }
 
-func NewTerraform(platform paperspace.ClusterPlatformType) *Terraform {
+func NewTerraform(platform paperspace.ClusterPlatformType, version string) *Terraform {
 	terraformModules := TerraformModules{}
 	var terraformOutputs *TerraformOutputs
 
 	switch platform {
 	case paperspace.ClusterPlatformAWS:
-		terraformModules.AWS = NewAWS()
+		terraformModules.AWS = NewAWS(version)
 		terraformOutputs = &TerraformOutputs{
 			DNSCName: &TerraformOutput{
 				Value: "${module.gradient_aws.elb_hostname}",
 			},
 		}
 	case paperspace.ClusterPlatformMetal:
-		terraformModules.Metal = NewMetal()
+		terraformModules.Metal = NewMetal(version)
 	}
 
 	terraform := Terraform{

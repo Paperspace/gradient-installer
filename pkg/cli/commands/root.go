@@ -52,7 +52,7 @@ func NewRootCommand(profileName string) *cobra.Command {
 
 	rootCommand.SetHelpTemplate(helpTemplate)
 	rootCommand.SetVersionTemplate(versionTemplate)
-	rootCommand.AddCommand(NewClusterCommand())
+	rootCommand.AddCommand(NewClusterCommand(version))
 	rootCommand.AddCommand(NewSetupCommand(profileName))
 	rootCommand.AddCommand(NewUpdateCommand())
 
